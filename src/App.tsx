@@ -3,7 +3,7 @@ import './App.css'
 import {useEffect, useState} from "react";
 
 function App() {
-    const [user, setUser] = useState<string>('');
+    const [user, setUser] = useState<{email: string, password: string, id: number}[]>([]);
     useEffect(() => {
         const API_URL = 'http://localhost:3000/';
 
@@ -24,7 +24,6 @@ function App() {
 
   return (
     <>
-        <p>{user}</p>
     </>
   )
 }
