@@ -1,10 +1,11 @@
 
 import './App.css'
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 function App() {
+    const [user, setUser] = useState<string>('');
     useEffect(() => {
-        const API_URL = 'http://localhost:3000/api/data';
+        const API_URL = 'http://localhost:3000/';
 
         fetch(API_URL)
             .then((response) => {
@@ -14,21 +15,16 @@ function App() {
                 return response.json();
             })
             .then((data) => {
-                setData(data);
-                setError(null);
-            })
-            .catch((error) => {
-                setError(error.message);
-                setData(null);
+                setUser(data.item);
             })
             .finally(() => {
-                setLoading(false);
+                // setLoading(false);
             });
     }, []);
 
   return (
     <>
-
+        <p>{user}</p>
     </>
   )
 }
