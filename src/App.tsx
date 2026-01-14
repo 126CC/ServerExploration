@@ -139,8 +139,6 @@ function usePut(newEmail: string, newPass: string, id: number, trigger: boolean)
 function useDelete(id: number, trigger: boolean) {
     useEffect(() => {
         if (!trigger) return;
-
-
         const API_URL = "https://server-for-serverexploration-edpu.onrender.com:3000/users" + id;
         fetch(API_URL, {
             method: "DELETE",
