@@ -2,160 +2,152 @@
 import './App.css'
 import {useEffect, useState} from "react";
 
-function App() {
 
-    const [users, setUser] = useState<{id: number}[]>([]);
-    const [email, setEmail] = useState<string>('');
-    const [pass, setPass] = useState<string>('');
-    const [newEmail, setNewEmail] = useState<string>('');
-    const[newPass, setNewPass] = useState<string>('');
+
+function App() {
+    const [email, setEmail] = useState('');
+    const [pass, setPass] = useState('');
+    const [newEmail, setNewEmail] = useState('');
+    const [newPass, setNewPass] = useState('');
     const [userId] = useState(0);
 
 
-
-    useEffect(() => {
-        const API_URL = 'http://localhost:3000/';
-
-        fetch(API_URL)
-            .then((response) => {
-                if(!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then((data) => {
-                setUser(data);
-            })
-            .finally(() => {
-                // setLoading(false);
-            });
-    });
+    const [postToggle, setPostToggle] = useState(false);
+    const [putToggle, setPutToggle] = useState(false);
+    const [deleteToggle, setDeleteToggle] = useState(false);
 
 
+    const [deleteId, setDeleteId] = useState<number>(-1);
 
-    useEffect(() => {
-        const API_URL = 'http://localhost:3000/users';
-        fetch(API_URL,{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({email, pass}),
-        })
-            .then((response) => {
-                if(!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-    }, [email, pass]);
 
-        useEffect(() => {
-            const API_URL = 'http://localhost:3000/users' + userId;
-            fetch(API_URL,{
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({newEmail, newPass}),
-            })
-                .then((response) => {
-                    if(!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-        }, [newEmail, newPass]);
+    usePost(email, pass, postToggle);
+    usePut(newEmail, newPass, userId, putToggle);
+    useDelete(deleteId, deleteToggle);
 
-        useEffect(() => {
-            const API_URL = 'http://localhost:3000/users' + userId;
-            const userIndex = users.findIndex(u => u.id === userId);
-            fetch(API_URL,{
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(userIndex),
-            })
-                .then((response) => {
-                    if(!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-        }, []);
+
+    const tempID = useGet(0);
 
 
     return (
         <>
+            <div>
+                <h1>test get</h1>
+                <p>{tempID && tempID.email}</p>
+            </div>
 
 
-            <div id={"containera"}>
-                <input id={"search"}
-                       type="text"
-                       placeholder="Email name"
-                />
-                <input id={"search2"}
-                       type="text"
-                       placeholder="Password here"
-                />
-                <button id={"button"} onClick={() => {
-                    setEmail((document.getElementById("search") as HTMLInputElement).value)
-                    setPass((document.getElementById("search2") as HTMLInputElement).value)
-
-
-
-
-                }}>create account
+            <div id="containera">
+                <input id="search" type="text" placeholder="Email name" />
+                <input id="search2" type="text" placeholder="Password here" />
+                <button
+                    onClick={() => {
+                        setEmail((document.getElementById("search") as HTMLInputElement).value);
+                        setPass((document.getElementById("search2") as HTMLInputElement).value);
+                        setPostToggle(true);
+                    }}
+                >
+                    create account
                 </button>
             </div>
 
 
             <div>
-                <p>{email}</p>
-                <p>{pass}</p>
-            </div>
-
-
-            <div>
-                <input id={"search3"}
-                       type="text"
-                       placeholder="New Email name"
-                />
-                <input id={"search4"}
-                       type="text"
-                       placeholder="New Password here"
-                />
-                <button id={"button"} onClick={() => {
-                    setNewEmail((document.getElementById("search3") as HTMLInputElement).value)
-                    setNewPass((document.getElementById("search4") as HTMLInputElement).value)
-
-
-
-
-                }}>change account details
+                <input id="search3" type="text" placeholder="New Email name" />
+                <input id="search4" type="text" placeholder="New Password here" />
+                <button
+                    onClick={() => {
+                        setNewEmail((document.getElementById("search3") as HTMLInputElement).value);
+                        setNewPass((document.getElementById("search4") as HTMLInputElement).value);
+                        setPutToggle(true);
+                    }}
+                >
+                    change account details
                 </button>
             </div>
 
 
-            {/*<div>*/}
-            {/*    <button onClick={() => setDeleteId(0)}>*/}
-            {/*        delete account*/}
-            {/*    </button>*/}
-            {/*</div>*/}
-
-
             <div>
-                <p>{newEmail}</p>
-                <p>{newPass}</p>
+                <button
+                    onClick={() => {
+                        setDeleteId(0);
+                        setDeleteToggle(true);
+                    }}
+                >
+                    delete account
+                </button>
             </div>
-
-
         </>
-    )
+    );
+}
+
+function useGet(id:number) {
+    const [data, setData] = useState<{id:number,email:string,pass:string}>({id:0, email:"email@email.com",pass:"1234" })
+    useEffect(() => {
+        const API_URL="https://server-for-serverexploration-edpu.onrender.com:3000/"+id;
+        fetch(API_URL)
+            .then((response) =>{
+                if(!response.ok){
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((data)=>{
+                setData(data)
+
+
+            })
+            .finally(()=>{
+                //  setLoading(false);
+            });
+    }, [id]);
+
+    return data;
 }
 
 
+
+function usePost(email: string, pass: string, trigger: boolean) {
+    useEffect(() => {
+        if (!trigger) return;
+
+
+        const API_URL = "https://server-for-serverexploration-edpu.onrender.com/users:3000/";
+        fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, pass }),
+        });
+    }, [email, pass, trigger]);
+}
+
+
+function usePut(newEmail: string, newPass: string, id: number, trigger: boolean) {
+    useEffect(() => {
+        if (!trigger) return;
+
+
+        const API_URL = "https://server-for-serverexploration-edpu.onrender.com/users:3000/" + id;
+        fetch(API_URL, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ newEmail, newPass }),
+        });
+    }, [newEmail, newPass, id, trigger]);
+}
+
+
+function useDelete(id: number, trigger: boolean) {
+    useEffect(() => {
+        if (!trigger) return;
+
+
+        const API_URL = "https://server-for-serverexploration-edpu.onrender.com/users:3000/" + id;
+        fetch(API_URL, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+        });
+    }, [id, trigger]);
+}
 
 export default App
 
