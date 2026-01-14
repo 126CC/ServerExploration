@@ -111,7 +111,7 @@ function usePost(email: string, pass: string, trigger: boolean) {
         if (!trigger) return;
 
 
-        const API_URL = "https://server-for-serverexploration-edpu.onrender.com/users:3000/";
+        const API_URL = "https://server-for-serverexploration-edpu.onrender.com:3000/users";
         fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -126,7 +126,7 @@ function usePut(newEmail: string, newPass: string, id: number, trigger: boolean)
         if (!trigger) return;
 
 
-        const API_URL = "https://server-for-serverexploration-edpu.onrender.com/users:3000/" + id;
+        const API_URL = "https://server-for-serverexploration-edpu.onrender.com:3000/users" + id;
         fetch(API_URL, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -141,7 +141,7 @@ function useDelete(id: number, trigger: boolean) {
         if (!trigger) return;
 
 
-        const API_URL = "https://server-for-serverexploration-edpu.onrender.com/users:3000/" + id;
+        const API_URL = "https://server-for-serverexploration-edpu.onrender.com:3000/users" + id;
         fetch(API_URL, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
