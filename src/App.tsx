@@ -56,7 +56,7 @@ function App() {
 function useGet(id:number) {
     const [data, setData] = useState<{id:number,email:string,pass:string} | null>(null)
     useEffect(() => {
-        const API_URL=`https://server-for-serverexploration-edpu.onrender.com:3000/${id}`;
+        const API_URL=`https://server-for-serverexploration-edpu.onrender.com/${id}`;
         fetch(API_URL)
             .then(r => r.json())
             .then(setData);
@@ -86,7 +86,7 @@ function usePut(newEmail: string, newPass: string, id: number, trigger: boolean,
     useEffect(() => {
         if (!trigger) return;
 
-        const API_URL = `https://server-for-serverexploration-edpu.onrender.com:3000/users/${id}`;
+        const API_URL = `https://server-for-serverexploration-edpu.onrender.com/users/${id}`;
         fetch(API_URL, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -101,7 +101,7 @@ function useDelete(id: number, trigger: boolean, reset: () => void) {
     useEffect(() => {
         if (!trigger) return;
 
-        const API_URL = `https://server-for-serverexploration-edpu.onrender.com:3000/users/${id}`;
+        const API_URL = `https://server-for-serverexploration-edpu.onrender.com/users/${id}`;
         fetch(API_URL, {
             method: "DELETE",
         })
