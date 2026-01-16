@@ -71,7 +71,7 @@ function usePost(email: string, pass: string, trigger: boolean, reset: () => voi
     useEffect(() => {
         if (!trigger) return;
 
-        const API_URL = 'https://server-for-serverexploration-edpu.onrender.com:3000/users';
+        const API_URL = 'https://server-for-serverexploration-edpu.onrender.com/users';
         fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
